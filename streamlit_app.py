@@ -54,9 +54,6 @@ session = get_snowflake_session()
 fruit_df = session.table("smoothies.public.fruit_options").select(col("FRUIT_NAME"))
 fruit_list = [row["FRUIT_NAME"] for row in fruit_df.collect()]
 
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")  
-st.text(smoothiefroot_response)
-
 name_on_order = st.text_input("Name on smoothie:")
 st.write("Name on your smoothie will be:")
 st.write(name_on_order)
@@ -76,6 +73,9 @@ if ingredients_list:
     )
 
     time_to_insert = st.button("Submit Order")
+    smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")  
+    # st.text(smoothiefroot_response.json())
+    sf_df = st.dataframe(data=smoothiefroot_response.json(),use_container_width=True)
     if time_to_insert:
         try:
             session.sql(my_insert_stmt).collect()
