@@ -1,0 +1,2 @@
+streamlit[snowflake]
+snowflake-snowpark-functions
