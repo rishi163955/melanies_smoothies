@@ -19,7 +19,7 @@ def get_snowflake_session():
         snowflake_config = st.secrets.get("snowflake", {})
     except StreamlitSecretNotFoundError:
         fallback_file = Path(__file__).parent / "secrets.toml"
-        if fallback_file.exists():
+        if fallback_file.exists() and tomllib is not None:
             with fallback_file.open("rb") as f:
                 fallback_secrets = tomllib.load(f)
             snowflake_config = fallback_secrets.get("snowflake", {})
