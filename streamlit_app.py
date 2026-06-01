@@ -2,8 +2,15 @@
 import streamlit as st
 from streamlit.errors import StreamlitSecretNotFoundError
 from snowflake.snowpark.functions import col
-import tomllib
 from pathlib import Path
+
+try:
+    import tomllib
+except ModuleNotFoundError:
+    try:
+        import tomli as tomllib  # pip install tomli
+    except ModuleNotFoundError:
+        tomllib = None
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie :cup_with_straw:")
