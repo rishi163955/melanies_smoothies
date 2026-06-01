@@ -64,11 +64,12 @@ ingredients_list = st.multiselect(
     fruit_list,
     max_selections=5,
 )
-ingredient_string = ''
+
 if ingredients_list:
+    ingredients_string = ''
     # ingredients_string = " ".join(ingredients_list)
     for fruit_chosen in ingredients_list:
-        ingredient_string += fruit_chosen + ' '
+        ingredients_string += fruit_chosen + ' '
         st.subheader(fruit_chosen +" Nutrition Infomation")
         smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")  
         # st.text(smoothiefroot_response.json())
