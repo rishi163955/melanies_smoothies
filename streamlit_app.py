@@ -1,6 +1,9 @@
 # Import python packages
 import streamlit as st
+from streamlit.errors import StreamlitSecretNotFoundError
 from snowflake.snowpark.functions import col
+import tomllib
+from pathlib import Path
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie :cup_with_straw:")
@@ -12,7 +15,17 @@ st.write(
 
 
 def get_snowflake_session():
-    snowflake_config = st.secrets.get("snowflake", {})
+    try:
+        snowflake_config = st.secrets.get("snowflake", {})
+    except StreamlitSecretNotFoundError:
+        fallback_file = Path(__file__).parent / "secrets.toml"
+        if fallback_file.exists():
+            with fallback_file.open("rb") as f:
+                fallback_secrets = tomllib.load(f)
+            snowflake_config = fallback_secrets.get("snowflake", {})
+        else:
+            snowflake_config = {}
+
     if not snowflake_config:
         st.error(
             "Snowflake connection is not configured. "
@@ -22,7 +35,7 @@ def get_snowflake_session():
         st.stop()
 
     try:
-        cnx = st.connection("snowflake", **snowflake_config)
+        cnx = st.connection("", type="snowflake", **snowflake_config)
         return cnx.session()
     except Exception as err:
         st.error(f"Unable to connect to Snowflake: {err}")
