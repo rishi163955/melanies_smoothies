@@ -1,3 +1,4 @@
 streamlit[snowflake]
 snowflake-snowpark-python
 tomllib
+requests
